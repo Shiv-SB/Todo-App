@@ -52,3 +52,13 @@ body {
     color: #3dd118de;
     cursor: pointer;
   }
+
+  .time-box {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+}

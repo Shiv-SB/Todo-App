@@ -5,6 +5,15 @@ $(document).ready(function() {
     const $taskList = $("#taskList");
     const $addTaskBtn = $("#addTaskBtn");
 
+    function updateTime() {
+        const now = dayjs().format(`dddd, MMMM D, YYYY h:mm:ss A`);
+        $("#currentTime").text(now);
+    };
+
+    updateTime();
+
+    setInterval(updateTime, 1000);
+
     async function fetchTasks() {
         const result = await fetch("/api/tasks");
         const tasks = await result.json();
