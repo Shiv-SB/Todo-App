@@ -13,8 +13,10 @@ const apiHandler = async (req: Request) => {
     const path: string = url.pathname;
     const method: string = req.method;
 
+    console.log("path:", path);
+
     // GET /api/tasks
-    if (path === "/api/tasks") {
+    if (method === "GET" && path === "/api/tasks") {
         const allTasks = await tasks.loadAll();
         return new Response(JSON.stringify(allTasks), { status: 200, headers: { "Content-Type": "application/json" } });
     }
@@ -24,6 +26,7 @@ const apiHandler = async (req: Request) => {
         const body = await req.json();
         const allTasks = await tasks.loadAll();
         const newTask: Task = { id: Date.now(), description: body.description, status: "Open" };
+        console.log(newTask);
         allTasks.push(newTask);
         await tasks.save(allTasks);
         return new Response(JSON.stringify(newTask), { status: 200, headers: { "Content-Type": "application/json" } });

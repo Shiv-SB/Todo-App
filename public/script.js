@@ -33,12 +33,13 @@ $(document).ready(function() {
                 body: JSON.stringify({ description }),
             });
             const newTask = await result.json();
+            console.log("New Entry:", newTask);
             addTaskToDom(newTask);
             $taskInput.val("");
         }
     });
 
-    async function comepleteTask(list) {
+    async function completeTask(list) {
         const $li = $(list.target);
         const taskId = $li.data("id");
         await fetch(`/api/tasks/${taskId}`, { method: "PUT" });
@@ -50,6 +51,7 @@ $(document).ready(function() {
         const $li = $(e.target).parent();
         const taskId = $li.data("id");
         await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
+        $li.remove();
     }
 
     fetchTasks();
