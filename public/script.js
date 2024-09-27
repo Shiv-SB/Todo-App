@@ -22,7 +22,7 @@ $(document).ready(function() {
     }
 
     function addTaskToDom(task) {
-        const $list = $(`<li class="${task.status}"><span>${task.description}</span></li>`);
+        const $list = $(`<li class="${task.status}"><span>> ${task.description}</span></li>`);
         $list.data("id", task.id);
 
         const $deleteBtn = $(`<button>Delete</delete>`).click(deleteTask);
