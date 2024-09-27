@@ -65,3 +65,16 @@ const staticFileHandler = async (req: Request) => {
     const file = Bun.file(path);
     return new Response(await file.text(), { status: 200, headers: { "Content-Type": file.type } });
 };
+
+serve({
+    fetch: (req) => {
+        if (req.url.startsWith("/api/")) {
+            return apiHandler(req);
+        } else {
+            return staticFileHandler(req);
+        }
+    },
+    port: 3000,
+});
+
+console.log(`Server running on http://localhost:3000`);
