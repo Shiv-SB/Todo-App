@@ -29,4 +29,16 @@ const apiHandler=  async (req: Request) => {
         return new Response(JSON.stringify(newTask), { status: 200, headers: { "Content-Type": "application/json" } });
     }
 
+    // PUT /api/tasks/:id
+    if (method === "PUT" && path.startsWith("/api/tasks/")) {
+        const id: number = parseInt(path.split("/").pop()!);
+        const allTasks = await tasks.loadAll();
+        const task = allTasks.find(task => task.id === id);
+        if (task) {
+            task.status = "Completed";
+            await tasks.save(allTasks);
+            return new Response(JSON.stringify(allTasks), { status: 200, headers: { "Content-Type": "application/json" } });
+        }
+        return new Response(`Task "${id}" not found`, { status: 404 });
+    }
 }
