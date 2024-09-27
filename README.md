@@ -29,7 +29,12 @@ Ensure that **Bun** is installed. You can install Bun using the following comman
 ### Install Dependencies
 
 This app uses only built-in modules in Bun, so no additional dependencies are required for the backend.
-For frontend dependencies, jQuery is loaded via CDN in the index.html.
+
+Run the following to ensure the built-in modules are includes:
+
+```powershell
+bun install
+```
 
 ### Running the Application
 Once you're in the project directory, you can run:
