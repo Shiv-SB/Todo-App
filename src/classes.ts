@@ -1,12 +1,8 @@
 import { existsSync } from "node:fs";
 
-type Task = {
-    id: number,
-    description: string,
-    status: "Completed" | "Open" | "On-Hold",
-}
+import type { Task } from "./types";
 
-class Tasks {
+export class Tasks {
 
     FILE_PATH: string = "";
     tasks: Task[] = [];
