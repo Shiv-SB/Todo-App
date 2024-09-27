@@ -41,4 +41,17 @@ const apiHandler=  async (req: Request) => {
         }
         return new Response(`Task "${id}" not found`, { status: 404 });
     }
+
+    // DELETE /api/tasks/:id
+    if (method === "DELETE" && path.startsWith("api/tasks/")) {
+        const id: number = parseInt(path.split("/").pop()!);
+        let allTasks = await tasks.loadAll();
+        const initialLength: number = allTasks.length;
+        allTasks = allTasks.filter(task => task.id === id);
+        if(allTasks.length < initialLength) {
+            await tasks.save(allTasks);
+            return new Response(`Task ${id} deleted`, { status: 204 });
+        }
+        return new Response(`Task ${id} not found`, { status: 404 });
+    }
 }
