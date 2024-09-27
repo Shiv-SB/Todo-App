@@ -21,6 +21,16 @@ $(document).ready(function() {
         tasks.forEach(task => addTaskToDom(task));
     }
 
+    async function getTotals() {
+        const total = await fetch("/api/tasks/total");
+        return (await total.json()).total;
+    }
+
+    async function addTotalToDom() {
+        const $p = $("#totalTasks");
+        $p.text(`Total Tasks: ${await getTotals()}`);
+    };
+
     function addTaskToDom(task) {
         const $list = $(`<li class="${task.status}"><span>> ${task.description}</span></li>`);
         $list.data("id", task.id);
@@ -51,8 +61,7 @@ $(document).ready(function() {
         const $li = $(list.target).parents("li");
         const taskId = $li.data("id");
         const task = await fetch(`/api/tasks/${taskId}`, { method: "PUT" });
-        const taskStatus = (await task.json())[0].status;
-        $li.attr("class", taskStatus);
+        $li.attr("class", "Completed");
     }
 
     async function deleteTask(e) {
@@ -64,4 +73,16 @@ $(document).ready(function() {
     }
 
     fetchTasks();
+    addTotalToDom();
+
+    const observer = new MutationObserver(function(mutations, observer) {
+        addTotalToDom();
+    });
+
+    observer.observe(document.querySelector(".container"), {
+        subtree: true,
+        attributes: true,
+    });
+
+
 });
