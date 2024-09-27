@@ -13,8 +13,6 @@ const apiHandler = async (req: Request) => {
     const path: string = url.pathname;
     const method: string = req.method;
 
-    console.log("path:", path);
-
     // GET /api/tasks
     if (method === "GET" && path === "/api/tasks") {
         const allTasks = await tasks.loadAll();
@@ -25,8 +23,7 @@ const apiHandler = async (req: Request) => {
     if (method === "POST" && path === "/api/tasks") {
         const body = await req.json();
         const allTasks = await tasks.loadAll();
-        const newTask: Task = { id: Date.now(), description: body.description, status: "Open" };
-        console.log(newTask);
+        const newTask: Task = { id: crypto.randomUUID().replaceAll("-", ""), description: body.description, status: "Open" };
         allTasks.push(newTask);
         await tasks.save(allTasks);
         return new Response(JSON.stringify(newTask), { status: 200, headers: { "Content-Type": "application/json" } });
@@ -34,7 +31,7 @@ const apiHandler = async (req: Request) => {
 
     // PUT /api/tasks/:id
     if (method === "PUT" && path.startsWith("/api/tasks/")) {
-        const id: number = parseInt(path.split("/").pop()!);
+        const id: string = path.split("/").pop()!;
         const allTasks = await tasks.loadAll();
         const task = allTasks.find(task => task.id === id);
         if (task) {
@@ -47,10 +44,10 @@ const apiHandler = async (req: Request) => {
 
     // DELETE /api/tasks/:id
     if (method === "DELETE" && path.startsWith("/api/tasks/")) {
-        const id: number = parseInt(path.split("/").pop()!);
+        const id: string = path.split("/").pop()!;
         let allTasks = await tasks.loadAll();
         const initialLength: number = allTasks.length;
-        allTasks = allTasks.filter(task => task.id === id);
+        allTasks = allTasks.filter(task => task.id !== id);
         if(allTasks.length < initialLength) {
             await tasks.save(allTasks);
             return new Response(`Task ${id} deleted`, { status: 204 });

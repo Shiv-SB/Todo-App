@@ -35,6 +35,7 @@ export class Tasks {
 
     async save(tasks: Task[]): Promise<void> {
         try {
+            this.tasks = tasks;
             const data = JSON.stringify(tasks, null, 4);
             await Bun.write(this.FILE_PATH, data);
         } catch (error) {

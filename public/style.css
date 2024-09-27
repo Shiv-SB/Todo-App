@@ -44,7 +44,11 @@ body {
     border-bottom: 1px solid #ccc;
   }
   
-  li.completed {
+  li.Completed {
     text-decoration: line-through;
   }
   
+  li > span:hover {
+    color: #3dd118de;
+    cursor: pointer;
+  }

@@ -8,18 +8,17 @@ $(document).ready(function() {
     async function fetchTasks() {
         const result = await fetch("/api/tasks");
         const tasks = await result.json();
-        console.log(tasks);
         $taskList.empty();
         tasks.forEach(task => addTaskToDom(task));
     }
 
     function addTaskToDom(task) {
-        const $list = $(`<li class="${task.status}">${task.description}</li>`);
+        const $list = $(`<li class="${task.status}"><span>${task.description}</span></li>`);
         $list.data("id", task.id);
 
         const $deleteBtn = $(`<button>Delete</delete>`).click(deleteTask);
         $list.append($deleteBtn);
-        $list.click(completeTask);
+        $list.children("span").click(completeTask);
 
         $taskList.append($list);
     }
@@ -40,10 +39,10 @@ $(document).ready(function() {
     });
 
     async function completeTask(list) {
-        const $li = $(list.target);
+        const $li = $(list.target).parents("li");
         const taskId = $li.data("id");
         await fetch(`/api/tasks/${taskId}`, { method: "PUT" });
-        $li.remove();
+        //$li.remove();
     }
 
     async function deleteTask(e) {
@@ -51,7 +50,7 @@ $(document).ready(function() {
         const $li = $(e.target).parent();
         const taskId = $li.data("id");
         await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
-        $li.remove();
+        //$li.remove();
     }
 
     fetchTasks();
