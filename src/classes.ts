@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+
 type Task = {
     id: number,
     description: string,
