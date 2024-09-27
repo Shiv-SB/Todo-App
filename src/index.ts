@@ -59,3 +59,9 @@ const apiHandler=  async (req: Request) => {
     return new Response("Not found", { status: 404 });
 };
 
+const staticFileHandler = async (req: Request) => {
+    const url: URL = new URL(req.url);
+    const path: string = url.pathname === "/" ? "../public/index.html" : url.pathname;
+    const file = Bun.file(path);
+    return new Response(await file.text(), { status: 200, headers: { "Content-Type": file.type } });
+};
