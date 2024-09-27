@@ -40,9 +40,16 @@ $(document).ready(function() {
 
     async function comepleteTask(list) {
         const $li = $(list.target);
-        const taskID = $li.data("id");
-        await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
+        const taskId = $li.data("id");
+        await fetch(`/api/tasks/${taskId}`, { method: "PUT" });
         $li.remove();
+    }
+
+    async function deleteTask(e) {
+        e.stopPropagation();
+        const $li = $(e.target).parent();
+        const taskId = $li.data("id");
+        await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
     }
 
     fetchTasks();
