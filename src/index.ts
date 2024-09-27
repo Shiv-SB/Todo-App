@@ -19,6 +19,13 @@ const apiHandler = async (req: Request) => {
         return new Response(JSON.stringify(allTasks), { status: 200, headers: { "Content-Type": "application/json" } });
     }
 
+    // GET /api/tasks/total
+    if (method === "GET" && path === "/api/tasks/total") {
+        const total = await tasks.total();
+        return new Response(JSON.stringify({ "total": total }), { status: 200, headers: { "Content-Type": "application/json" } });
+    }
+
+
     // POST /api/tasks
     if (method === "POST" && path === "/api/tasks") {
         const body = await req.json();

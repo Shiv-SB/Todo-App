@@ -43,4 +43,9 @@ export class Tasks {
         }
     }
 
+    async total(): Promise<number> {
+        const allTasks = await this.loadAll();
+        return allTasks.length;
+    }
+
 }
