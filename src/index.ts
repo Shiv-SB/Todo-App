@@ -8,15 +8,15 @@ const FILE_PATH: string = "./tasks.json";
 
 const tasks = new Tasks(FILE_PATH);
 
-const apiHandler=  async (req: Request) => {
+const apiHandler = async (req: Request) => {
     const url: URL = new URL(req.url);
     const path: string = url.pathname;
     const method: string = req.method;
 
     // GET /api/tasks
-    if (method === "GET" && path === "/api/tasks") {
+    if (path === "/api/tasks") {
         const allTasks = await tasks.loadAll();
-        return new Response(JSON.stringify(allTasks), { status: 200, headers: { "Content-Type:": "application/json" } });
+        return new Response(JSON.stringify(allTasks), { status: 200, headers: { "Content-Type": "application/json" } });
     }
 
     // POST /api/tasks
@@ -43,7 +43,7 @@ const apiHandler=  async (req: Request) => {
     }
 
     // DELETE /api/tasks/:id
-    if (method === "DELETE" && path.startsWith("api/tasks/")) {
+    if (method === "DELETE" && path.startsWith("/api/tasks/")) {
         const id: number = parseInt(path.split("/").pop()!);
         let allTasks = await tasks.loadAll();
         const initialLength: number = allTasks.length;
@@ -60,21 +60,27 @@ const apiHandler=  async (req: Request) => {
 };
 
 const staticFileHandler = async (req: Request) => {
-    const url: URL = new URL(req.url);
-    const path: string = url.pathname === "/" ? "../public/index.html" : url.pathname;
-    const file = Bun.file(path);
-    return new Response(await file.text(), { status: 200, headers: { "Content-Type": file.type } });
+        const url: URL = new URL(req.url);
+        const path: string = url.pathname === "/" ? "/index.html" : url.pathname;
+        const file = Bun.file(`../public${path}`);
+        if (file.type.includes("image")) { // to handle favicon.ico
+            return new Response(await file.arrayBuffer(), { status: 200, headers: { "Content-Type": file.type } });
+        }
+        return new Response(await file.text(), { status: 200, headers: { "Content-Type": file.type } }); 
 };
 
 serve({
     fetch: (req) => {
-        if (req.url.startsWith("/api/")) {
+        const url: URL = new URL(req.url);
+        console.log(req.method, url.pathname);
+        if (url.pathname.startsWith("/api/")) {
             return apiHandler(req);
         } else {
             return staticFileHandler(req);
         }
     },
     port: 3000,
+    development: true,
 });
 
 console.log(`Server running on http://localhost:3000`);
