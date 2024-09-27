@@ -41,8 +41,9 @@ $(document).ready(function() {
     async function completeTask(list) {
         const $li = $(list.target).parents("li");
         const taskId = $li.data("id");
-        await fetch(`/api/tasks/${taskId}`, { method: "PUT" });
-        //$li.remove();
+        const task = await fetch(`/api/tasks/${taskId}`, { method: "PUT" });
+        const taskStatus = (await task.json())[0].status;
+        $li.attr("class", taskStatus);
     }
 
     async function deleteTask(e) {
@@ -50,7 +51,7 @@ $(document).ready(function() {
         const $li = $(e.target).parent();
         const taskId = $li.data("id");
         await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
-        //$li.remove();
+        $li.remove();
     }
 
     fetchTasks();
