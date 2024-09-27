@@ -54,4 +54,8 @@ const apiHandler=  async (req: Request) => {
         }
         return new Response(`Task ${id} not found`, { status: 404 });
     }
-}
+
+    // Fallback for unkown routes
+    return new Response("Not found", { status: 404 });
+};
+
