@@ -32,7 +32,12 @@ $(document).ready(function() {
     };
 
     function addTaskToDom(task) {
-        const $list = $(`<li class="${task.status}"><span>> ${task.description}</span></li>`);
+        const html = 
+        `<li class="${task.status}">
+            <span class="description">> ${task.description}</span><br>
+            <span class="timestamp">${task.timestamp ?? "No Timestamp Available."}</span>
+        </li>`
+        const $list = $(html);
         $list.data("id", task.id);
 
         const $deleteBtn = $(`<button>Delete</delete>`).click(deleteTask);

@@ -1,4 +1,5 @@
-import { readFile, writeFile } from "node:fs";
+import dayjs from "dayjs";
+
 import { serve } from "bun";
 import { Tasks } from "./classes";
 
@@ -30,7 +31,11 @@ const apiHandler = async (req: Request) => {
     if (method === "POST" && path === "/api/tasks") {
         const body = await req.json();
         const allTasks = await tasks.loadAll();
-        const newTask: Task = { id: crypto.randomUUID().replaceAll("-", ""), description: body.description, status: "Open" };
+        const newTask: Task = { id: crypto.randomUUID().replaceAll("-", ""), 
+            description: body.description, 
+            status: "Open",
+            timestamp: dayjs().format(`YYYY-MM-DD HH:mm:ss`),
+        };
         allTasks.push(newTask);
         await tasks.save(allTasks);
         return new Response(JSON.stringify(newTask), { status: 200, headers: { "Content-Type": "application/json" } });
